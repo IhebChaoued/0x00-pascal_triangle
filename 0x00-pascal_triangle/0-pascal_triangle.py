@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""Triangle"""
+
+
 def pascal_triangle(n):
     """Generate Pascal's Triangle up to row n."""
     if n <= 0:
