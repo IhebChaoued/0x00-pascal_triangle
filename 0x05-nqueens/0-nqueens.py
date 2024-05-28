@@ -49,3 +49,27 @@ def print_solution(board, n):
             if board[i][j] == 1:
                 solutions.append([i, j])
     print(solutions)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+
+    try:
+        n = int(sys.argv[1])
+    except ValueError:
+        print("N must be a number")
+        sys.exit(1)
+
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+
+    board = [[0 for _ in range(n)] for _ in range(n)]
+
+    if solve_n_queens(board, 0, n) is False:
+        print("No solution exists")
+        sys.exit(1)
+
+    print_solution(board, n)
