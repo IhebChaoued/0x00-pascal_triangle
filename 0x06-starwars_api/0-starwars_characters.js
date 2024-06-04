@@ -1,8 +1,7 @@
 #!/usr/bin/node
 
 const request = require('request');
-const movieId = process.argv[2];
-const apiUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
+const url = `https://swapi-api.alx-tools.com/api/films/${process.argv[2]}/`;
 
 request(apiUrl, (error, response, body) => {
   if (error) {
@@ -24,7 +23,6 @@ request(apiUrl, (error, response, body) => {
       const character = JSON.parse(body);
       characterNames[index] = character.name;
 
-      // Check if all character names have been fetched
       if (characterNames.filter(name => name).length === characters.length) {
         characterNames.forEach(name => {
           console.log(name);
