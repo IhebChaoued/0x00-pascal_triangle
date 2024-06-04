@@ -1,7 +1,8 @@
 #!/usr/bin/node
 
 const request = require('request');
-const url = `https://swapi-api.alx-tools.com/api/films/${process.argv[2]}/`;
+const movieId = process.argv[2];
+const apiUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
 request(apiUrl, (error, response, body) => {
   if (error) {
@@ -11,23 +12,27 @@ request(apiUrl, (error, response, body) => {
 
   const film = JSON.parse(body);
   const characters = film.characters;
-  const characterNames = [];
 
-  characters.forEach((characterUrl, index) => {
-    request(characterUrl, (error, response, body) => {
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const character = JSON.parse(body);
-      characterNames[index] = character.name;
-
-      if (characterNames.filter(name => name).length === characters.length) {
-        characterNames.forEach(name => {
-          console.log(name);
-        });
-      }
+  const promises = characters.map((characterUrl) => {
+    return new Promise((resolve, reject) => {
+      request(characterUrl, (error, response, body) => {
+        if (error) {
+          reject(error);
+        } else {
+          const character = JSON.parse(body);
+          resolve(character.name);
+        }
+      });
     });
   });
+
+  Promise.all(promises)
+    .then((names) => {
+      names.forEach((name) => {
+        console.log(name);
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
