@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-Module for making change
-"""
+""" Module for making change """
 
 
 def makeChange(coins, total):
@@ -11,12 +9,20 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
+    coins.sort(reverse=True)
+
+    coins_used = 0
+    amount_checked = 0
 
     for coin in coins:
-        for amount in range(coin, total + 1):
-            if dp[amount - coin] != float('inf'):
-                dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+        while amount_checked < total:
+            amount_checked += coin
+            coins_used += 1
 
-    return dp[total] if dp[total] != float('inf') else -1
+        if amount_checked == total:
+            return coins_used
+
+        amount_checked -= coin
+        coins_used -= 1
+
+    return -1
